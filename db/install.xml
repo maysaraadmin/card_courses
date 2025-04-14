@@ -1,9 +1,35 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="block/card_courses/db" VERSION="2024020100" COMMENT="XMLDB file for Moodle block/card_courses"
+<XMLDB PATH="blocks/card_courses/db" VERSION="2024020100" COMMENT="XMLDB file for Moodle Card Courses block"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
->
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd">
+
   <TABLES>
-    <!-- No database tables needed for this block -->
+    <TABLE NAME="block_card_courses" COMMENT="Main table for Card Courses block">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSEQUENCE="true" ENUM="false" />
+        <FIELD NAME="blockinstanceid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" ENUM="false" />
+        <FIELD NAME="rootcategory" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" DEFAULT="0" ENUM="false" />
+        <FIELD NAME="showcategories" TYPE="int" LENGTH="1" NOTNULL="true" SEQUENCE="false" DEFAULT="1" ENUM="false" />
+        <FIELD NAME="showcourses" TYPE="int" LENGTH="1" NOTNULL="true" SEQUENCE="false" DEFAULT="1" ENUM="false" />
+        <FIELD NAME="maxcategories" TYPE="int" LENGTH="3" NOTNULL="true" SEQUENCE="false" DEFAULT="6" ENUM="false" />
+        <FIELD NAME="maxcourses" TYPE="int" LENGTH="3" NOTNULL="true" SEQUENCE="false" DEFAULT="12" ENUM="false" />
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" ENUM="false" />
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" DEFAULT="0" ENUM="false" />
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" />
+        <KEY NAME="blockinstanceid_fk" TYPE="foreign" FIELDS="blockinstanceid" REFTABLE="block_instances" REFFIELDS="id" />
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="blockinstanceid_idx" UNIQUE="true" FIELDS="blockinstanceid" />
+      </INDEXES>
+    </TABLE>
   </TABLES>
+
+  <STATEMENTS>
+    <STATEMENT NAME="create_default_records" COMMENT="Create default records for existing instances">
+      INSERT INTO {block_card_courses} (blockinstanceid, timecreated, timemodified)
+      SELECT id, UNIX_TIMESTAMP(), UNIX_TIMESTAMP() FROM {block_instances} WHERE blockname = 'card_courses';
+    </STATEMENT>
+  </STATEMENTS>
 </XMLDB>
