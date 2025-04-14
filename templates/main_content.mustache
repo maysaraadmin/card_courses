@@ -1,14 +1,14 @@
 <div class="block_card_courses">
     {{#parentcategory}}
     <div class="breadcrumb">
-        <a href="{{url}}">&laquo; Back to {{name}}</a>
+        <a href="{{url}}" class="breadcrumb-link">&laquo; {{name}}</a>
     </div>
     {{/parentcategory}}
 
     {{^parentcategory}}
         {{#currentcategory}}
         <div class="breadcrumb">
-            <a href="{{config.wwwroot}}/blocks/card_courses/view.php?blockid={{blockid}}&categoryid=0">&laquo; Back to all categories</a>
+            <a href="{{config.wwwroot}}/blocks/card_courses/view.php?blockid={{blockid}}&categoryid=0" class="breadcrumb-link">&laquo; {{#str}}allcategories, block_card_courses{{/str}}</a>
         </div>
         {{/currentcategory}}
     {{/parentcategory}}
@@ -17,44 +17,54 @@
     <h3 class="current-category">{{currentcategoryname}}</h3>
     {{/currentcategory}}
 
-    {{#categories}}
+    {{#hascategories}}
     <div class="categories-container">
-        <h4>Subcategories</h4>
+        <h4>{{#str}}subcategories, block_card_courses{{/str}}</h4>
         <div class="category-grid">
             {{#categories}}
                 {{> block_card_courses/category_card}}
             {{/categories}}
         </div>
     </div>
-    {{/categories}}
+    {{/hascategories}}
 
     {{#viewcoursesurl}}
     <div class="view-courses-link">
-        <a href="{{viewcoursesurl}}" class="btn btn-primary">View Courses in {{currentcategoryname}}</a>
+        <a href="{{viewcoursesurl}}" class="btn btn-primary">{{#str}}viewcourses, block_card_courses{{/str}}</a>
     </div>
     {{/viewcoursesurl}}
 
     {{#showcourses}}
-    <div class="courses-container">
-        <h4>Courses in {{currentcategoryname}}</h4>
-        <div class="course-grid">
-            {{#courses}}
-                {{> block_card_courses/course_card}}
-            {{/courses}}
+        {{#hascourses}}
+        <div class="courses-container">
+            <h4>{{#str}}coursesin, block_card_courses{{/str}} {{currentcategoryname}}</h4>
+            <div class="course-grid">
+                {{#courses}}
+                    {{> block_card_courses/course_card}}
+                {{/courses}}
+            </div>
         </div>
-    </div>
+        {{/hascourses}}
+        {{^hascourses}}
+        <div class="alert alert-info">{{#str}}nocourses, block_card_courses{{/str}}</div>
+        {{/hascourses}}
     {{/showcourses}}
 
-    {{^categories}}
+    {{^hascategories}}
         {{^showcourses}}
-            {{#courses}}
+            {{#hascourses}}
             <div class="courses-container">
-                <h4>Courses in {{currentcategoryname}}</h4>
+                <h4>{{#str}}coursesin, block_card_courses{{/str}} {{currentcategoryname}}</h4>
                 <div class="course-grid">
-                    {{> block_card_courses/course_card}}
+                    {{#courses}}
+                        {{> block_card_courses/course_card}}
+                    {{/courses}}
                 </div>
             </div>
-            {{/courses}}
+            {{/hascourses}}
+            {{^hascourses}}
+            <div class="alert alert-info">{{#str}}nocourses, block_card_courses{{/str}}</div>
+            {{/hascourses}}
         {{/showcourses}}
-    {{/categories}}
+    {{/hascategories}}
 </div>

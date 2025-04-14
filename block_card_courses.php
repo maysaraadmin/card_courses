@@ -1,5 +1,4 @@
 <?php
-
 defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot.'/blocks/moodleblock.class.php');
 require_once($CFG->dirroot.'/course/lib.php');
@@ -8,6 +7,12 @@ class block_card_courses extends block_base {
 
     public function init() {
         $this->title = get_string('pluginname', 'block_card_courses');
+        $this->add_css();
+    }
+
+    private function add_css() {
+        global $PAGE;
+        $PAGE->requires->css('/blocks/card_courses/styles.css');
     }
 
     public function instance_allow_multiple() {
@@ -55,7 +60,9 @@ class block_card_courses extends block_base {
             'currentcategory' => $categoryid,
             'showcourses' => $showcourses,
             'config' => array('wwwroot' => $CFG->wwwroot),
-            'blockid' => $this->instance->id
+            'blockid' => $this->instance->id,
+            'hascategories' => false,
+            'hascourses' => false
         );
 
         // Get current category info
@@ -86,44 +93,47 @@ class block_card_courses extends block_base {
         }
 
         // Get subcategories
-        $subcategories = core_course_category::get($categoryid)->get_children();
-        foreach ($subcategories as $category) {
-            $context = context_coursecat::instance($category->id);
-            $data['categories'][] = array(
-                'id' => $category->id,
-                'name' => format_string($category->name, true, array('context' => $context)),
-                'description' => format_text($category->description, $category->descriptionformat, array('context' => $context)),
-                'url' => new moodle_url('/blocks/card_courses/view.php', array(
-                    'blockid' => $this->instance->id,
-                    'categoryid' => $category->id
-                )),
-                'course_count' => $category->get_courses_count(array('recursive' => false)),
-                'image_url' => $this->get_category_image($category)
-            );
-        }
-
-        // Get courses if requested or no subcategories
-        if ($showcourses || empty($subcategories)) {
-            $courses = get_courses($categoryid, 'c.sortorder ASC', 'c.*');
-            foreach ($courses as $course) {
-                if ($course->id == SITEID) {
-                    continue;
+        if ($category = core_course_category::get($categoryid)) {
+            $subcategories = $category->get_children();
+            if (!empty($subcategories)) {
+                $data['hascategories'] = true;
+                foreach ($subcategories as $subcat) {
+                    $context = context_coursecat::instance($subcat->id);
+                    $data['categories'][] = array(
+                        'id' => $subcat->id,
+                        'name' => format_string($subcat->name, true, array('context' => $context)),
+                        'description' => format_text($subcat->description, $subcat->descriptionformat, array('context' => $context)),
+                        'url' => new moodle_url('/blocks/card_courses/view.php', array(
+                            'blockid' => $this->instance->id,
+                            'categoryid' => $subcat->id
+                        )),
+                        'course_count' => $subcat->get_courses_count(array('recursive' => false)),
+                        'image_url' => $this->get_category_image($subcat)
+                    );
                 }
-                $coursecontext = context_course::instance($course->id);
-                $data['courses'][] = array(
-                    'id' => $course->id,
-                    'fullname' => format_string($course->fullname, true, array('context' => $coursecontext)),
-                    'summary' => format_text($course->summary, $course->summaryformat, array('context' => $coursecontext)),
-                    'url' => new moodle_url('/course/view.php', array('id' => $course->id)),
-                    'image_url' => $this->get_course_image($course)
-                );
             }
-        }
 
-        // Add view courses link if there are both subcategories and courses
-        if (!$showcourses && !empty($subcategories)) {
-            $coursecount = core_course_category::get($categoryid)->get_courses_count(array('recursive' => false));
-            if ($coursecount > 0) {
+            // Get courses if requested or no subcategories
+            $courses = $category->get_courses(array('recursive' => false));
+            if (!empty($courses)) {
+                $data['hascourses'] = true;
+                foreach ($courses as $course) {
+                    if ($course->id == SITEID) {
+                        continue;
+                    }
+                    $coursecontext = context_course::instance($course->id);
+                    $data['courses'][] = array(
+                        'id' => $course->id,
+                        'fullname' => format_string($course->fullname, true, array('context' => $coursecontext)),
+                        'summary' => format_text($course->summary, $course->summaryformat, array('context' => $coursecontext)),
+                        'url' => new moodle_url('/course/view.php', array('id' => $course->id)),
+                        'image_url' => $this->get_course_image($course)
+                    );
+                }
+            }
+
+            // Add view courses link if there are both subcategories and courses
+            if (!$showcourses && $data['hascategories'] && $data['hascourses']) {
                 $data['viewcoursesurl'] = new moodle_url('/blocks/card_courses/view.php', array(
                     'blockid' => $this->instance->id,
                     'categoryid' => $categoryid,
