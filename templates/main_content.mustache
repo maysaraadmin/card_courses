@@ -21,7 +21,9 @@
     <div class="categories-container">
         <h4>Subcategories</h4>
         <div class="category-grid">
-            {{> block_card_courses/category_card}}
+            {{#categories}}
+                {{> block_card_courses/category_card}}
+            {{/categories}}
         </div>
     </div>
     {{/categories}}
