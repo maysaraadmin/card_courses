@@ -31,13 +31,11 @@ class block_card_courses extends block_base {
     }
 
     public function get_content() {
-        global $CFG, $OUTPUT;
+        global $OUTPUT;
 
         if ($this->content !== null) {
             return $this->content;
         }
-
-        require_once($CFG->libdir . '/coursecatlib.php');
 
         $this->content = new stdClass();
         $this->content->text = '';
@@ -57,12 +55,8 @@ class block_card_courses extends block_base {
         );
 
         if ($showcategories) {
-            $categories = core_course_category::get($rootcategory)->get_children();
-            $count = 0;
+            $categories = $this->get_categories($rootcategory, $maxcategories);
             foreach ($categories as $category) {
-                if ($count >= $maxcategories) {
-                    break;
-                }
                 $categorycontext = context_coursecat::instance($category->id);
                 $categorydata = array(
                     'id' => $category->id,
@@ -73,20 +67,12 @@ class block_card_courses extends block_base {
                     'image_url' => $this->get_category_image($category)
                 );
                 $data['categories'][] = $categorydata;
-                $count++;
             }
         }
 
         if ($showcourses) {
-            $courses = get_courses($rootcategory, 'c.sortorder ASC', 'c.id,c.shortname,c.fullname,c.summary,c.summaryformat,c.visible,c.category');
-            $count = 0;
+            $courses = $this->get_courses($rootcategory, $maxcourses);
             foreach ($courses as $course) {
-                if ($count >= $maxcourses) {
-                    break;
-                }
-                if ($course->id == SITEID || !$course->visible) {
-                    continue;
-                }
                 $coursecontext = context_course::instance($course->id);
                 $coursedata = array(
                     'id' => $course->id,
@@ -98,7 +84,6 @@ class block_card_courses extends block_base {
                     'image_url' => $this->get_course_image($course)
                 );
                 $data['courses'][] = $coursedata;
-                $count++;
             }
         }
 
@@ -111,10 +96,45 @@ class block_card_courses extends block_base {
         return $this->content;
     }
 
+    private function get_categories($parentid, $limit) {
+        global $DB;
+
+        $params = ['parent' => $parentid, 'visible' => 1];
+        $sql = "SELECT cc.id, cc.name, cc.description, cc.descriptionformat, 
+                       cc.parent, cc.coursecount, cc.visible
+                FROM {course_categories} cc
+                WHERE cc.parent = :parent
+                AND cc.visible = :visible
+                ORDER BY cc.sortorder ASC";
+
+        return $DB->get_records_sql($sql, $params, 0, $limit);
+    }
+
+    private function get_courses($categoryid, $limit) {
+        global $DB;
+
+        $params = ['visible' => 1, 'siteid' => SITEID];
+        $categoryselect = '';
+
+        if ($categoryid > 0) {
+            $categoryselect = 'AND c.category = :categoryid';
+            $params['categoryid'] = $categoryid;
+        }
+
+        $sql = "SELECT c.id, c.shortname, c.fullname, c.summary, c.summaryformat, 
+                       c.visible, c.category
+                FROM {course} c
+                WHERE c.id <> :siteid
+                $categoryselect
+                AND c.visible = :visible
+                ORDER BY c.sortorder ASC";
+
+        return $DB->get_records_sql($sql, $params, 0, $limit);
+    }
+
     private function get_category_image($category) {
         global $OUTPUT;
         
-        // First try to get a custom image if one exists
         $context = context_coursecat::instance($category->id);
         $fs = get_file_storage();
         $files = $fs->get_area_files($context->id, 'coursecat', 'image', 0, 'itemid, filepath, filename', false);
@@ -131,16 +151,14 @@ class block_card_courses extends block_base {
             return $imageurl->out();
         }
         
-        // Fallback to default image
         return $OUTPUT->image_url('defaultcategory', 'block_card_courses')->out();
     }
 
     private function get_course_image($course) {
         global $OUTPUT;
         
-        // First try to get course overview files
-        $fs = get_file_storage();
         $context = context_course::instance($course->id);
+        $fs = get_file_storage();
         $files = $fs->get_area_files($context->id, 'course', 'overviewfiles', 0, 'itemid, filepath, filename', false);
         
         if ($file = array_shift($files)) {
@@ -155,7 +173,6 @@ class block_card_courses extends block_base {
             return $imageurl->out();
         }
         
-        // Fallback to default image
         return $OUTPUT->image_url('defaultcourse', 'block_card_courses')->out();
     }
 }
