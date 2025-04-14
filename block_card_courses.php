@@ -1,5 +1,8 @@
 <?php
 
+defined('MOODLE_INTERNAL') || die();
+require_once($CFG->dirroot . '/blocks/moodleblock.class.php');
+
 class block_card_courses extends block_base {
 
     public function init() {
@@ -31,7 +34,7 @@ class block_card_courses extends block_base {
     }
 
     public function get_content() {
-        global $OUTPUT;
+        global $OUTPUT, $DB, $PAGE;
 
         if ($this->content !== null) {
             return $this->content;
@@ -41,95 +44,109 @@ class block_card_courses extends block_base {
         $this->content->text = '';
         $this->content->footer = '';
 
-        // Get configuration settings.
-        $rootcategory = isset($this->config->rootcategory) ? $this->config->rootcategory : 0;
-        $showcategories = isset($this->config->showcategories) ? $this->config->showcategories : true;
-        $showcourses = isset($this->config->showcourses) ? $this->config->showcourses : true;
-        $maxcategories = isset($this->config->maxcategories) ? $this->config->maxcategories : 6;
-        $maxcourses = isset($this->config->maxcourses) ? $this->config->maxcourses : 12;
+        // Get current category from URL or use root
+        $currentcategory = optional_param('categoryid', 0, PARAM_INT);
+        $showcourses = optional_param('showcourses', false, PARAM_BOOL);
 
-        // Prepare data for template.
+        // Prepare data for template
         $data = array(
             'categories' => array(),
-            'courses' => array()
+            'courses' => array(),
+            'parentcategory' => null,
+            'currentcategory' => $currentcategory,
+            'showcourses' => $showcourses,
+            'config' => array('wwwroot' => $CFG->wwwroot),
+            'blockid' => $this->instance->id
         );
 
-        if ($showcategories) {
-            $categories = $this->get_categories($rootcategory, $maxcategories);
-            foreach ($categories as $category) {
-                $categorycontext = context_coursecat::instance($category->id);
-                $categorydata = array(
-                    'id' => $category->id,
-                    'name' => format_string($category->name, true, ['context' => $categorycontext]),
-                    'description' => format_text($category->description, $category->descriptionformat, ['context' => $categorycontext]),
-                    'url' => new moodle_url('/course/index.php', ['categoryid' => $category->id]),
-                    'course_count' => $category->coursecount,
-                    'image_url' => $this->get_category_image($category)
-                );
-                $data['categories'][] = $categorydata;
+        // Get current category name for breadcrumb
+        if ($currentcategory > 0) {
+            $currentcat = $DB->get_record('course_categories', array('id' => $currentcategory));
+            if ($currentcat) {
+                $data['currentcategoryname'] = format_string($currentcat->name);
             }
         }
 
-        if ($showcourses) {
-            $courses = $this->get_courses($rootcategory, $maxcourses);
+        // Get parent category info if not root
+        if ($currentcategory > 0) {
+            $parentcategory = $DB->get_record('course_categories', array('id' => $currentcategory));
+            if ($parentcategory && $parentcategory->parent > 0) {
+                $grandparent = $DB->get_record('course_categories', array('id' => $parentcategory->parent));
+                if ($grandparent) {
+                    $grandparentcontext = context_coursecat::instance($grandparent->id);
+                    $data['parentcategory'] = array(
+                        'id' => $grandparent->id,
+                        'name' => format_string($grandparent->name, true, array('context' => $grandparentcontext)),
+                        'url' => new moodle_url('/blocks/card_courses/view.php', array(
+                            'blockid' => $this->instance->id,
+                            'categoryid' => $grandparent->id
+                        ))
+                    );
+                }
+            }
+        }
+
+        // Get subcategories of current category
+        $subcategories = $DB->get_records('course_categories', array(
+            'parent' => $currentcategory,
+            'visible' => 1
+        ), 'sortorder ASC');
+
+        foreach ($subcategories as $category) {
+            $categorycontext = context_coursecat::instance($category->id);
+            $data['categories'][] = array(
+                'id' => $category->id,
+                'name' => format_string($category->name, true, array('context' => $categorycontext)),
+                'description' => format_text($category->description, $category->descriptionformat, array('context' => $categorycontext)),
+                'url' => new moodle_url('/blocks/card_courses/view.php', array(
+                    'blockid' => $this->instance->id,
+                    'categoryid' => $category->id
+                )),
+                'course_count' => $category->coursecount,
+                'image_url' => $this->get_category_image($category)
+            );
+        }
+
+        // Get courses for current category
+        if ($currentcategory > 0 && (empty($subcategories) || $showcourses)) {
+            $courses = $DB->get_records('course', array(
+                'category' => $currentcategory,
+                'visible' => 1
+            ), 'sortorder ASC');
+            
             foreach ($courses as $course) {
+                if ($course->id == SITEID) {
+                    continue;
+                }
                 $coursecontext = context_course::instance($course->id);
-                $coursedata = array(
+                $data['courses'][] = array(
                     'id' => $course->id,
-                    'fullname' => format_string($course->fullname, true, ['context' => $coursecontext]),
-                    'shortname' => format_string($course->shortname, true, ['context' => $coursecontext]),
-                    'summary' => format_text($course->summary, $course->summaryformat, ['context' => $coursecontext]),
-                    'url' => new moodle_url('/course/view.php', ['id' => $course->id]),
-                    'category_id' => $course->category,
+                    'fullname' => format_string($course->fullname, true, array('context' => $coursecontext)),
+                    'summary' => format_text($course->summary, $course->summaryformat, array('context' => $coursecontext)),
+                    'url' => new moodle_url('/course/view.php', array('id' => $course->id)),
                     'image_url' => $this->get_course_image($course)
                 );
-                $data['courses'][] = $coursedata;
             }
         }
 
-        // Render the template.
-        $this->content->text = $OUTPUT->render_from_template('block_card_courses/main_content', $data);
+        // Add view all courses link if there are both subcategories and courses
+        if (!$showcourses && !empty($subcategories) && $this->category_has_courses($currentcategory)) {
+            $data['viewcoursesurl'] = new moodle_url('/blocks/card_courses/view.php', array(
+                'blockid' => $this->instance->id,
+                'categoryid' => $currentcategory,
+                'showcourses' => true
+            ));
+        }
 
-        // Add CSS.
+        $this->content->text = $OUTPUT->render_from_template('block_card_courses/main_content', $data);
         $this->content->text .= '<style>' . file_get_contents(__DIR__ . '/styles.css') . '</style>';
 
         return $this->content;
     }
 
-    private function get_categories($parentid, $limit) {
+    private function category_has_courses($categoryid) {
         global $DB;
-
-        $params = ['parent' => $parentid, 'visible' => 1];
-        $sql = "SELECT cc.id, cc.name, cc.description, cc.descriptionformat, 
-                       cc.parent, cc.coursecount, cc.visible
-                FROM {course_categories} cc
-                WHERE cc.parent = :parent
-                AND cc.visible = :visible
-                ORDER BY cc.sortorder ASC";
-
-        return $DB->get_records_sql($sql, $params, 0, $limit);
-    }
-
-    private function get_courses($categoryid, $limit) {
-        global $DB;
-
-        $params = ['visible' => 1, 'siteid' => SITEID];
-        $categoryselect = '';
-
-        if ($categoryid > 0) {
-            $categoryselect = 'AND c.category = :categoryid';
-            $params['categoryid'] = $categoryid;
-        }
-
-        $sql = "SELECT c.id, c.shortname, c.fullname, c.summary, c.summaryformat, 
-                       c.visible, c.category
-                FROM {course} c
-                WHERE c.id <> :siteid
-                $categoryselect
-                AND c.visible = :visible
-                ORDER BY c.sortorder ASC";
-
-        return $DB->get_records_sql($sql, $params, 0, $limit);
+        return $DB->count_records('course', array('category' => $categoryid, 'visible' => 1)) > 0;
     }
 
     private function get_category_image($category) {
@@ -139,16 +156,15 @@ class block_card_courses extends block_base {
         $fs = get_file_storage();
         $files = $fs->get_area_files($context->id, 'coursecat', 'image', 0, 'itemid, filepath, filename', false);
         
-        if ($file = array_shift($files)) {
-            $imageurl = moodle_url::make_pluginfile_url(
+        if ($file = reset($files)) {
+            return moodle_url::make_pluginfile_url(
                 $file->get_contextid(),
                 $file->get_component(),
                 $file->get_filearea(),
                 $file->get_itemid(),
                 $file->get_filepath(),
                 $file->get_filename()
-            );
-            return $imageurl->out();
+            )->out();
         }
         
         return $OUTPUT->image_url('defaultcategory', 'block_card_courses')->out();
@@ -161,16 +177,15 @@ class block_card_courses extends block_base {
         $fs = get_file_storage();
         $files = $fs->get_area_files($context->id, 'course', 'overviewfiles', 0, 'itemid, filepath, filename', false);
         
-        if ($file = array_shift($files)) {
-            $imageurl = moodle_url::make_pluginfile_url(
+        if ($file = reset($files)) {
+            return moodle_url::make_pluginfile_url(
                 $file->get_contextid(),
                 $file->get_component(),
                 $file->get_filearea(),
                 $file->get_itemid(),
                 $file->get_filepath(),
                 $file->get_filename()
-            );
-            return $imageurl->out();
+            )->out();
         }
         
         return $OUTPUT->image_url('defaultcourse', 'block_card_courses')->out();

@@ -1,9 +1,58 @@
-<div class="card-container">
+<div class="block_card_courses">
+    {{#parentcategory}}
+    <div class="breadcrumb">
+        <a href="{{url}}">&laquo; Back to {{name}}</a>
+    </div>
+    {{/parentcategory}}
+
+    {{^parentcategory}}
+        {{#currentcategory}}
+        <div class="breadcrumb">
+            <a href="{{config.wwwroot}}/blocks/card_courses/view.php?blockid={{blockid}}&categoryid=0">&laquo; Back to all categories</a>
+        </div>
+        {{/currentcategory}}
+    {{/parentcategory}}
+
+    {{#currentcategory}}
+    <h3 class="current-category">{{currentcategoryname}}</h3>
+    {{/currentcategory}}
+
     {{#categories}}
-        {{> block_card_courses/category_card}}
+    <div class="categories-container">
+        <h4>Subcategories</h4>
+        <div class="category-grid">
+            {{> block_card_courses/category_card}}
+        </div>
+    </div>
     {{/categories}}
-    
-    {{#courses}}
-        {{> block_card_courses/course_card}}
-    {{/courses}}
+
+    {{#viewcoursesurl}}
+    <div class="view-courses-link">
+        <a href="{{viewcoursesurl}}" class="btn btn-primary">View Courses in {{currentcategoryname}}</a>
+    </div>
+    {{/viewcoursesurl}}
+
+    {{#showcourses}}
+    <div class="courses-container">
+        <h4>Courses in {{currentcategoryname}}</h4>
+        <div class="course-grid">
+            {{#courses}}
+                {{> block_card_courses/course_card}}
+            {{/courses}}
+        </div>
+    </div>
+    {{/showcourses}}
+
+    {{^categories}}
+        {{^showcourses}}
+            {{#courses}}
+            <div class="courses-container">
+                <h4>Courses in {{currentcategoryname}}</h4>
+                <div class="course-grid">
+                    {{> block_card_courses/course_card}}
+                </div>
+            </div>
+            {{/courses}}
+        {{/showcourses}}
+    {{/categories}}
 </div>
