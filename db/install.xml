@@ -6,23 +6,26 @@
   <TABLES>
     <TABLE NAME="block_card_courses" COMMENT="Main table for Card Courses block">
       <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSEQUENCE="true" ENUM="false" />
-        <FIELD NAME="blockinstanceid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" ENUM="false" />
-        <FIELD NAME="rootcategory" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" DEFAULT="0" ENUM="false" />
-        <FIELD NAME="showcategories" TYPE="int" LENGTH="1" NOTNULL="true" SEQUENCE="false" DEFAULT="1" ENUM="false" />
-        <FIELD NAME="showcourses" TYPE="int" LENGTH="1" NOTNULL="true" SEQUENCE="false" DEFAULT="1" ENUM="false" />
-        <FIELD NAME="maxcategories" TYPE="int" LENGTH="3" NOTNULL="true" SEQUENCE="false" DEFAULT="6" ENUM="false" />
-        <FIELD NAME="maxcourses" TYPE="int" LENGTH="3" NOTNULL="true" SEQUENCE="false" DEFAULT="12" ENUM="false" />
-        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" ENUM="false" />
-        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" DEFAULT="0" ENUM="false" />
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" />
+        <FIELD NAME="blockinstanceid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" />
+        <FIELD NAME="rootcategory" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" DEFAULT="0" />
+        <FIELD NAME="showcategories" TYPE="int" LENGTH="1" NOTNULL="true" SEQUENCE="false" DEFAULT="1" />
+        <FIELD NAME="showcourses" TYPE="int" LENGTH="1" NOTNULL="true" SEQUENCE="false" DEFAULT="1" />
+        <FIELD NAME="maxcategories" TYPE="int" LENGTH="3" NOTNULL="true" SEQUENCE="false" DEFAULT="6" />
+        <FIELD NAME="maxcourses" TYPE="int" LENGTH="3" NOTNULL="true" SEQUENCE="false" DEFAULT="12" />
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" />
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" DEFAULT="0" />
+        <FIELD NAME="cardstyle" TYPE="char" LENGTH="20" NOTNULL="true" SEQUENCE="false" DEFAULT="default" />
+        <FIELD NAME="showimages" TYPE="int" LENGTH="1" NOTNULL="true" SEQUENCE="false" DEFAULT="1" />
+        <FIELD NAME="showdescriptions" TYPE="int" LENGTH="1" NOTNULL="true" SEQUENCE="false" DEFAULT="1" />
+        <FIELD NAME="cardbgcolor" TYPE="char" LENGTH="7" NOTNULL="false" SEQUENCE="false" />
+        <FIELD NAME="cardtextcolor" TYPE="char" LENGTH="7" NOTNULL="false" SEQUENCE="false" />
+        <FIELD NAME="cardbordercolor" TYPE="char" LENGTH="7" NOTNULL="false" SEQUENCE="false" />
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id" />
-        <KEY NAME="blockinstanceid_fk" TYPE="foreign" FIELDS="blockinstanceid" REFTABLE="block_instances" REFFIELDS="id" />
+        <KEY NAME="blockinstanceid_fk" TYPE="foreign-unique" FIELDS="blockinstanceid" REFTABLE="block_instances" REFFIELDS="id" />
       </KEYS>
-      <INDEXES>
-        <INDEX NAME="blockinstanceid_idx" UNIQUE="true" FIELDS="blockinstanceid" />
-      </INDEXES>
     </TABLE>
   </TABLES>
 
