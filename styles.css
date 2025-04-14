@@ -1,0 +1,67 @@
+.block_card_courses .card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 10px;
+}
+
+.block_card_courses .card {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: white;
+}
+
+.block_card_courses .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.block_card_courses .card-image {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+}
+
+.block_card_courses .card-content {
+    padding: 15px;
+}
+
+.block_card_courses .card-title {
+    margin: 0 0 10px 0;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #333;
+}
+
+.block_card_courses .card-description {
+    color: #666;
+    font-size: 0.9em;
+    margin-bottom: 15px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.block_card_courses .card-meta {
+    display: flex;
+    justify-content: space-between;
+    color: #888;
+    font-size: 0.8em;
+}
+
+.block_card_courses .card-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.block_card_courses .section-title {
+    margin: 20px 0 10px 0;
+    font-size: 1.4em;
+    color: #333;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 5px;
+}

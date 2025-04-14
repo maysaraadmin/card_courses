@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="block/card_courses/db" VERSION="2024020100" COMMENT="XMLDB file for Moodle block/card_courses"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <!-- No database tables needed for this block -->
+  </TABLES>
+</XMLDB>
