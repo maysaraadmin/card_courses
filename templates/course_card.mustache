@@ -1,7 +1,12 @@
 <div class="course-card">
     <a href="{{url}}" class="course-link">
         <div class="course-image-container">
-            <img src="{{image_url}}" alt="{{fullname}}" class="course-image">
+            {{#image_url}}
+                <img src="{{image_url}}" alt="{{fullname}}" class="course-image">
+            {{/image_url}}
+            {{^image_url}}
+                <div class="course-image-placeholder"></div>
+            {{/image_url}}
         </div>
         <div class="course-content">
             <h4 class="course-title">{{fullname}}</h4>

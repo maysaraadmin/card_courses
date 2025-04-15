@@ -53,19 +53,21 @@ function get_course_image($course) {
         $files = $fs->get_area_files($context->id, 'course', 'overviewfiles', 0, 'sortorder DESC, id DESC', false);
         
         if ($file = reset($files)) {
-            return moodle_url::make_pluginfile_url(
-                $file->get_contextid(),
-                $file->get_component(),
-                $file->get_filearea(),
-                $file->get_itemid(),
-                $file->get_filepath(),
-                $file->get_filename(),
-                false
-            )->out();
+            if ($file->is_valid_image()) {
+                return moodle_url::make_pluginfile_url(
+                    $file->get_contextid(),
+                    $file->get_component(),
+                    $file->get_filearea(),
+                    $file->get_itemid(),
+                    $file->get_filepath(),
+                    $file->get_filename(),
+                    false
+                )->out();
+            }
         }
     } catch (Exception $e) {
         debugging('Error getting course image: '.$e->getMessage(), DEBUG_NORMAL);
     }
     
-    return $OUTPUT->image_url('defaultcourse', 'block_card_courses')->out();
+    return null; // Return null when no valid image exists
 }
