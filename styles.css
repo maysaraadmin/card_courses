@@ -112,14 +112,23 @@
     overflow: hidden;
     position: relative;
     background: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-
 
 .course-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: transform 0.3s ease;
+}
+
+.course-image[src*='defaultcourse'] {
+    object-fit: contain;
+    padding: 20px;
+    width: 80%;
+    height: 80%;
 }
 .course-image-container:hover .course-image {
     transform: scale(1.05);
@@ -164,7 +173,6 @@
 
 /* Responsive styles */
 @media (max-width: 768px) {
-    .block-card-courses-container,
     .courses-grid {
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     }

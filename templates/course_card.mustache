@@ -1,12 +1,8 @@
 <div class="course-card">
     <a href="{{url}}" class="course-link">
         <div class="course-image-container">
-            {{#image_url}}
-                <img src="{{image_url}}" alt="{{fullname}}" class="course-image">
-            {{/image_url}}
-            {{^image_url}}
-                <div class="course-image-placeholder"></div>
-            {{/image_url}}
+            <img src="{{image_url}}" alt="{{fullname}}" class="course-image" 
+                 onerror="this.onerror=null;this.src='{{config.wwwroot}}/theme/image.php/boost/block_card_courses/defaultcourse/{{#str}}defaultcourse, block_card_courses{{/str}}';">
         </div>
         <div class="course-content">
             <h4 class="course-title">{{fullname}}</h4>
