@@ -4,17 +4,9 @@
         <div class="category-description">{{{category.description}}}</div>
     </div>
     
-    <div class="courses-container">
+    <div class="courses-grid">
         {{#courses}}
-            <div class="course-card">
-                <a href="{{url}}" class="course-link">
-                    <img src="{{image_url}}" alt="{{fullname}}" class="course-image">
-                    <div class="course-content">
-                        <h3 class="course-title">{{fullname}}</h3>
-                        <div class="course-description">{{{summary}}}</div>
-                    </div>
-                </a>
-            </div>
+            {{> block_card_courses/course_card}}
         {{/courses}}
     </div>
 </div>

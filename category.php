@@ -10,6 +10,7 @@ $PAGE->set_context($context);
 $PAGE->set_url('/blocks/card_courses/category.php', ['id' => $categoryid]);
 $PAGE->set_title($category->name);
 $PAGE->set_heading($category->name);
+$PAGE->set_pagelayout('incourse');
 
 echo $OUTPUT->header();
 
@@ -35,7 +36,7 @@ foreach ($courses as $course) {
         'fullname' => format_string($course->fullname, true, ['context' => $coursecontext]),
         'summary' => format_text($course->summary, $course->summaryformat, ['context' => $coursecontext]),
         'url' => new moodle_url('/course/view.php', ['id' => $course->id]),
-        'image_url' => get_course_image($course) // Changed from $this-> to direct function call
+        'image_url' => get_course_image($course)
     ];
 }
 

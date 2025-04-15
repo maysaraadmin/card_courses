@@ -42,12 +42,12 @@ class block_card_courses extends block_base {
         $this->content->text = '';
         $this->content->footer = '';
 
-        // Get configuration settings with defaults.
+        // Get configuration settings with defaults
         $rootcategory = isset($this->config->rootcategory) ? (int)$this->config->rootcategory : 0;
         $showcategories = isset($this->config->showcategories) ? (bool)$this->config->showcategories : true;
         $maxcategories = isset($this->config->maxcategories) ? (int)$this->config->maxcategories : 6;
 
-        // Prepare data for template.
+        // Prepare data for template
         $data = ['categories' => []];
 
         if ($showcategories) {

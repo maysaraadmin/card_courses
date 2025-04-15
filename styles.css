@@ -1,3 +1,4 @@
+/* Main container */
 .block-card-courses-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -5,43 +6,45 @@
     padding: 10px;
 }
 
-.card {
+/* Category card styles */
+.category-card {
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     background: white;
     height: 100%;
-    display: flex;
-    flex-direction: column;
 }
 
-.card:hover {
+.category-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-.card-image {
+.category-image-container {
     width: 100%;
     height: 160px;
+    overflow: hidden;
+}
+
+.category-image {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
 }
 
-.card-content {
+.category-content {
     padding: 15px;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
 }
 
-.card-title {
+.category-title {
     margin: 0 0 10px 0;
     font-size: 1.2rem;
     font-weight: bold;
     color: #333;
 }
 
-.card-description {
+.category-description {
     color: #666;
     font-size: 0.9rem;
     margin-bottom: 15px;
@@ -49,21 +52,11 @@
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    flex-grow: 1;
 }
 
-.card-meta {
+.category-meta {
     color: #888;
     font-size: 0.8rem;
-    margin-top: auto;
-}
-
-.card-link {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    text-decoration: none;
-    color: inherit;
 }
 
 /* Category View Page */
@@ -78,18 +71,20 @@
     text-align: center;
 }
 
-.courses-container {
+.courses-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 20px;
 }
 
+/* Course card styles */
 .course-card {
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     background: white;
+    height: 100%;
 }
 
 .course-card:hover {
@@ -97,9 +92,42 @@
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
+.course-image-container {
+    width: 100%;
+    height: 160px;
+    overflow: hidden;
+}
+
+.course-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.course-content {
+    padding: 15px;
+}
+
+.course-title {
+    margin: 0 0 10px 0;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.course-description {
+    color: #666;
+    font-size: 0.9rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Responsive styles */
 @media (max-width: 768px) {
     .block-card-courses-container,
-    .courses-container {
+    .courses-grid {
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     }
 }
