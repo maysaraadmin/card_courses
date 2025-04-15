@@ -1,0 +1,20 @@
+<div class="category-view">
+    <div class="category-header">
+        <h1>{{category.name}}</h1>
+        <div class="category-description">{{{category.description}}}</div>
+    </div>
+    
+    <div class="courses-container">
+        {{#courses}}
+            <div class="course-card">
+                <a href="{{url}}" class="course-link">
+                    <img src="{{image_url}}" alt="{{fullname}}" class="course-image">
+                    <div class="course-content">
+                        <h3 class="course-title">{{fullname}}</h3>
+                        <div class="course-description">{{{summary}}}</div>
+                    </div>
+                </a>
+            </div>
+        {{/courses}}
+    </div>
+</div>
