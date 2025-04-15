@@ -7,12 +7,6 @@ class block_card_courses extends block_base {
 
     public function init() {
         $this->title = get_string('pluginname', 'block_card_courses');
-        $this->add_css();
-    }
-
-    private function add_css() {
-        global $PAGE;
-        $PAGE->requires->css('/blocks/card_courses/styles.css');
     }
 
     public function instance_allow_multiple() {
@@ -40,7 +34,7 @@ class block_card_courses extends block_base {
     }
 
     public function get_content() {
-        global $OUTPUT, $DB, $CFG;
+        global $OUTPUT, $DB, $CFG, $USER;
 
         if ($this->content !== null) {
             return $this->content;
@@ -58,6 +52,7 @@ class block_card_courses extends block_base {
             'courses' => array(),
             'parentcategory' => null,
             'currentcategory' => $categoryid,
+            'currentcategoryname' => get_string('allcategories', 'block_card_courses'),
             'showcourses' => $showcourses,
             'config' => array('wwwroot' => $CFG->wwwroot),
             'blockid' => $this->instance->id,
@@ -88,12 +83,12 @@ class block_card_courses extends block_base {
                     }
                 }
             }
-        } else {
-            $data['currentcategoryname'] = get_string('allcategories', 'block_card_courses');
         }
 
-        // Get subcategories
-        if ($category = core_course_category::get($categoryid)) {
+        // Get subcategories and courses
+        $category = core_course_category::get($categoryid);
+        if ($category) {
+            // Get subcategories
             $subcategories = $category->get_children();
             if (!empty($subcategories)) {
                 $data['hascategories'] = true;
@@ -113,23 +108,26 @@ class block_card_courses extends block_base {
                 }
             }
 
-            // Get courses if requested or no subcategories
-            $courses = $category->get_courses(array('recursive' => false));
-            if (!empty($courses)) {
-                $data['hascourses'] = true;
+            // Get courses
+            if ($showcourses || !$data['hascategories']) {
+                $courses = $category->get_courses(array('recursive' => false, 'sort' => array('sortorder' => 'ASC')));
+                
                 foreach ($courses as $course) {
                     if ($course->id == SITEID) {
                         continue;
                     }
                     $coursecontext = context_course::instance($course->id);
-                    $data['courses'][] = array(
-                        'id' => $course->id,
-                        'fullname' => format_string($course->fullname, true, array('context' => $coursecontext)),
-                        'summary' => format_text($course->summary, $course->summaryformat, array('context' => $coursecontext)),
-                        'url' => new moodle_url('/course/view.php', array('id' => $course->id)),
-                        'image_url' => $this->get_course_image($course)
-                    );
+                    if (is_enrolled($coursecontext, $USER) || has_capability('moodle/course:view', $coursecontext)) {
+                        $data['courses'][] = array(
+                            'id' => $course->id,
+                            'fullname' => format_string($course->fullname, true, array('context' => $coursecontext)),
+                            'summary' => format_text($course->summary, $course->summaryformat, array('context' => $coursecontext)),
+                            'url' => new moodle_url('/course/view.php', array('id' => $course->id)),
+                            'image_url' => $this->get_course_image($course)
+                        );
+                    }
                 }
+                $data['hascourses'] = !empty($data['courses']);
             }
 
             // Add view courses link if there are both subcategories and courses
@@ -142,11 +140,21 @@ class block_card_courses extends block_base {
             }
         }
 
-        $this->content->text = $OUTPUT->render_from_template('block_card_courses/main_content', $data);
+        // Load strings for mustache template
+        $data['str'] = array(
+            'allcategories' => get_string('allcategories', 'block_card_courses'),
+            'subcategories' => get_string('subcategories', 'block_card_courses'),
+            'courses' => get_string('courses', 'block_card_courses'),
+            'coursesin' => get_string('coursesin', 'block_card_courses'),
+            'viewcourses' => get_string('viewcourses', 'block_card_courses'),
+            'nocourses' => get_string('nocourses', 'block_card_courses')
+        );
+
+        $this->content->text = $OUTPUT->render_from_template('block_card_courses/view', $data);
         return $this->content;
     }
 
-    private function get_category_image($category) {
+    public function get_category_image($category) {
         global $OUTPUT;
         
         $context = context_coursecat::instance($category->id);
@@ -167,7 +175,7 @@ class block_card_courses extends block_base {
         return $OUTPUT->image_url('defaultcategory', 'block_card_courses')->out();
     }
 
-    private function get_course_image($course) {
+    public function get_course_image($course) {
         global $OUTPUT;
         
         $context = context_course::instance($course->id);
@@ -186,5 +194,11 @@ class block_card_courses extends block_base {
         }
         
         return $OUTPUT->image_url('defaultcourse', 'block_card_courses')->out();
+    }
+
+    public function html_attributes() {
+        $attributes = parent::html_attributes();
+        $attributes['class'] .= ' block_card_courses';
+        return $attributes;
     }
 }

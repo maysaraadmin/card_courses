@@ -38,4 +38,4 @@ $string['subcategories'] = 'Subcategories';
 $string['coursesin'] = 'Courses in {$a}';
 $string['viewcoursesin'] = 'View courses in {$a}';
 $string['breadcrumb'] = 'Navigation';
-
+$string['courses'] = 'Courses';
