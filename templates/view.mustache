@@ -23,22 +23,7 @@
             <h4>{{str.subcategories}}</h4>
             <div class="category-grid">
                 {{#categories}}
-                <div class="category-card">
-                    <a href="{{url}}" class="category-link">
-                        <div class="category-image-container">
-                            <img src="{{image_url}}" alt="{{name}}" class="category-image">
-                        </div>
-                        <div class="category-content">
-                            <h4 class="category-title">{{name}}</h4>
-                            {{#description}}
-                            <div class="category-description">{{{description}}}</div>
-                            {{/description}}
-                            <div class="category-meta">
-                                <span class="course-count">{{course_count}} {{str.courses}}</span>
-                            </div>
-                        </div>
-                    </a>
-                </div>
+                    {{> block_card_courses/category_card}}
                 {{/categories}}
             </div>
         </div>
@@ -50,62 +35,18 @@
         </div>
         {{/viewcoursesurl}}
 
-        {{#showcourses}}
-            {{#hascourses}}
-            <div class="courses-container">
-                <h4>{{str.coursesin}} {{currentcategoryname}}</h4>
-                <div class="course-grid">
-                    {{#courses}}
-                    <div class="course-card">
-                        <a href="{{url}}" class="course-link">
-                            <div class="course-image-container">
-                                <img src="{{image_url}}" alt="{{fullname}}" class="course-image">
-                            </div>
-                            <div class="course-content">
-                                <h4 class="course-title">{{fullname}}</h4>
-                                {{#summary}}
-                                <div class="course-description">{{{summary}}}</div>
-                                {{/summary}}
-                            </div>
-                        </a>
-                    </div>
-                    {{/courses}}
-                </div>
+        {{#hascourses}}
+        <div class="courses-container">
+            <h4>{{str.coursesin}} {{currentcategoryname}}</h4>
+            <div class="course-grid">
+                {{#courses}}
+                    {{> block_card_courses/course_card}}
+                {{/courses}}
             </div>
-            {{/hascourses}}
-            {{^hascourses}}
-            <div class="alert alert-info">{{str.nocourses}}</div>
-            {{/hascourses}}
-        {{/showcourses}}
-
-        {{^hascategories}}
-            {{^showcourses}}
-                {{#hascourses}}
-                <div class="courses-container">
-                    <h4>{{str.coursesin}} {{currentcategoryname}}</h4>
-                    <div class="course-grid">
-                        {{#courses}}
-                        <div class="course-card">
-                            <a href="{{url}}" class="course-link">
-                                <div class="course-image-container">
-                                    <img src="{{image_url}}" alt="{{fullname}}" class="course-image">
-                                </div>
-                                <div class="course-content">
-                                    <h4 class="course-title">{{fullname}}</h4>
-                                    {{#summary}}
-                                    <div class="course-description">{{{summary}}}</div>
-                                    {{/summary}}
-                                </div>
-                            </a>
-                        </div>
-                        {{/courses}}
-                    </div>
-                </div>
-                {{/hascourses}}
-                {{^hascourses}}
-                <div class="alert alert-info">{{str.nocourses}}</div>
-                {{/hascourses}}
-            {{/showcourses}}
-        {{/hascategories}}
+        </div>
+        {{/hascourses}}
+        {{^hascourses}}
+        <div class="alert alert-info">{{str.nocourses}}</div>
+        {{/hascourses}}
     </div>
 </div>

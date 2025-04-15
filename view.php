@@ -4,7 +4,7 @@ require_once($CFG->libdir.'/blocklib.php');
 
 $blockid = required_param('blockid', PARAM_INT);
 $categoryid = optional_param('categoryid', 0, PARAM_INT);
-$showcourses = optional_param('showcourses', false, PARAM_BOOL);
+$showcourses = optional_param('showcourses', true, PARAM_BOOL);
 
 // Validate block instance
 $blockinstance = $DB->get_record('block_instances', ['id' => $blockid], '*', MUST_EXIST);

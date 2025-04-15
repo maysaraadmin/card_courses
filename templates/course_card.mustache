@@ -1,11 +1,9 @@
-<div class="course-card">
-    <a href="{{url}}" class="course-link">
-        <div class="course-image-container">
-            <img src="{{image_url}}" alt="{{fullname}}" class="course-image">
-        </div>
-        <div class="course-content">
-            <h4 class="course-title">{{fullname}}</h4>
-            <div class="course-description">{{{summary}}}</div>
+<div class="card card-course">
+    <a href="{{url}}" class="card-link" aria-label="{{#str}} viewcourse, block_card_courses, {{fullname}} {{/str}}">
+        <img src="{{image_url}}" alt="" class="card-image" role="presentation">
+        <div class="card-content">
+            <h3 class="card-title">{{fullname}}</h3>
+            <div class="card-description">{{{summary}}}</div>
         </div>
     </a>
 </div>
