@@ -1,7 +1,7 @@
-<div class="course-card">
-    <a href="{{url}}" class="course-link">
+<div class="course-card" data-courseid="{{id}}">
+    <a href="{{url}}" class="course-link" aria-label="{{#str}}viewcourse, block_card_courses, {{fullname}}{{/str}}">
         <div class="course-image-container">
-            <img src="{{image_url}}" alt="{{fullname}}" class="course-image" 
+            <img src="{{image_url}}" alt="" class="course-image" 
                  onerror="this.onerror=null;this.src='{{config.wwwroot}}/theme/image.php/boost/block_card_courses/defaultcourse/{{#str}}defaultcourse, block_card_courses{{/str}}';">
         </div>
         <div class="course-content">

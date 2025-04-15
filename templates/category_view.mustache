@@ -1,12 +1,17 @@
-<div class="category-view">
+<div class="category-view" data-region="category-view">
     <div class="category-header">
         <h1>{{category.name}}</h1>
         <div class="category-description">{{{category.description}}}</div>
     </div>
     
+    {{#courses}}
     <div class="courses-grid">
-        {{#courses}}
-            {{> block_card_courses/course_card}}
-        {{/courses}}
+        {{> block_card_courses/course_card}}
     </div>
+    {{/courses}}
+    {{^courses}}
+    <div class="alert alert-info">
+        {{#str}}nocourses, block_card_courses{{/str}}
+    </div>
+    {{/courses}}
 </div>
