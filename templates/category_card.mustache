@@ -1,11 +1,13 @@
-<div class="card card-category">
-    <a href="{{url}}" class="card-link" aria-label="{{#str}} viewcategory, block_card_courses, {{name}} {{/str}}">
-        <img src="{{image_url}}" alt="" class="card-image" role="presentation">
-        <div class="card-content">
-            <h3 class="card-title">{{name}}</h3>
-            <div class="card-description">{{{description}}}</div>
-            <div class="card-meta">
-                <span>{{course_count}} {{#str}} courses, block_card_courses {{/str}}</span>
+<div class="category-card">
+    <a href="{{url}}" class="category-link">
+        <div class="category-image-container">
+            <img src="{{image_url}}" alt="{{name}}" class="category-image">
+        </div>
+        <div class="category-content">
+            <h4 class="category-title">{{name}}</h4>
+            <div class="category-description">{{{description}}}</div>
+            <div class="category-meta">
+                <span class="course-count">{{course_count}} {{#str}}courses, block_card_courses{{/str}}</span>
             </div>
         </div>
     </a>
