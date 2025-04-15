@@ -1,5 +1,4 @@
 <?php
-
 require_once(__DIR__.'/../../config.php');
 require_once($CFG->libdir.'/filelib.php');
 
@@ -61,10 +60,8 @@ $data = [
 ];
 
 foreach ($courses as $course) {
-    // $course is a core_course_list_element object
     $coursecontext = context_course::instance($course->id);
     
-    // Check if user can view the course.
     if (!core_course_category::can_view_course_info($course)) {
         continue;
     }
@@ -87,12 +84,6 @@ if ($totalcourses > $perpage) {
 
 echo $OUTPUT->footer();
 
-/**
- * Get course image URL with fallback to default image.
- * 
- * @param core_course_list_element $course Course object
- * @return string Image URL
- */
 function get_course_image(core_course_list_element $course): string {
     global $OUTPUT;
     
@@ -109,6 +100,5 @@ function get_course_image(core_course_list_element $course): string {
         }
     }
     
-    // Fallback to default image
     return $OUTPUT->image_url('defaultcourse', 'block_card_courses')->out();
 }
