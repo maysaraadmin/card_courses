@@ -1,55 +1,26 @@
-
-</div><div class="category-view" data-region="category-view">
+<div class="category-view" data-region="category-view">
     <div class="category-header">
-        <div class="category-breadcrumb">
-            <nav aria-label="{{#str}}breadcrumb, block_card_courses{{/str}}">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{config.wwwroot}}/blocks/card_courses/categories.php">{{#str}}allcategories, block_card_courses{{/str}}</a></li>
-                    {{#parentcategories}}
-                    <li class="breadcrumb-item"><a href="{{config.wwwroot}}/blocks/card_courses/category.php?id={{id}}">{{name}}</a></li>
-                    {{/parentcategories}}
-                    <li class="breadcrumb-item active" aria-current="page">{{category.name}}</li>
-                </ol>
-            </nav>
-        </div>
-        
         <div class="category-info">
             {{#category.image_url}}
             <div class="category-image">
                 <img src="{{category.image_url}}" alt="" class="img-fluid rounded">
             </div>
             {{/category.image_url}}
-            <div class="category-text">
-                <h1>{{category.name}}</h1>
-                {{#category.description}}
-                <div class="category-description">{{{category.description}}}</div>
-                {{/category.description}}
-                <div class="category-stats">
-                    <span class="badge badge-primary">{{category.course_count}} {{#str}}courses, block_card_courses{{/str}}</span>
-                    {{#category.has_subcategories}}
-                    <span class="badge badge-secondary">{{category.subcategories_count}} {{#str}}subcategories, block_card_courses{{/str}}</span>
-                    {{/category.has_subcategories}}
-                </div>
-            </div>
         </div>
     </div>
     
     {{#subcategories}}
     <section class="category-subcategories" aria-labelledby="subcategories-heading">
         <h2 id="subcategories-heading" class="section-title">{{#str}}subcategories, block_card_courses{{/str}}</h2>
-        <div class="subcategories-grid">
-            {{#subcategories}}
-            <div class="subcategory-card">
-                <a href="{{url}}" class="subcategory-link">
-                    <div class="subcategory-content">
-                        <h3 class="subcategory-title">{{name}}</h3>
-                        <div class="subcategory-meta">
-                            <span class="course-count">{{course_count}} {{#str}}courses, block_card_courses{{/str}}</span>
-                        </div>
-                    </div>
-                </a>
+        <div class="subcategories-container">
+            <div class="subcategories-list">
+                {{#subcategories}}
+                <div class="subcategory-item">
+                    <a href="{{url}}" class="subcategory-link">{{name}}</a>
+                    <span class="subcategory-course-count">{{course_count}}</span>
+                </div>
+                {{/subcategories}}
             </div>
-            {{/subcategories}}
         </div>
     </section>
     {{/subcategories}}
@@ -66,5 +37,5 @@
             {{#str}}nocourses, block_card_courses{{/str}}
         </div>
         {{/courses}}
-    </section> 
-    </div>
+    </section>
+</div>

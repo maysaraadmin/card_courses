@@ -1,4 +1,3 @@
-
 :root {
     --primary-color: #fcc434;
     --primary-light: #ffd867;
@@ -60,24 +59,26 @@
     display: flex;
     flex-direction: column;
     height: 100%;
+    gap: 12px;
 }
 
 .category-title {
-    margin: 0 0 10px 0;
+    margin: 0;
     font-size: 1.2rem;
     font-weight: bold;
     color: var(--secondary-color);
+    line-height: 1.3;
 }
 
 .category-description {
     color: rgba(60, 60, 64, 0.8);
     font-size: 0.9rem;
-    margin-bottom: 15px;
+    margin: 0;
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    flex-grow: 1;
+    line-height: 1.4;
 }
 
 .category-meta {
@@ -86,6 +87,69 @@
     color: var(--secondary-color);
     font-size: 0.8rem;
     font-weight: bold;
+    margin: 0;
+}
+
+/* Subcategories in Category Card */
+.subcategories-container {
+    margin-top: auto;
+    background: var(--subcategory-bg);
+    border-radius: calc(var(--border-radius) - 2px);
+    padding: 12px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.subcategories-label {
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: var(--secondary-color);
+    width: 100%;
+}
+
+.subcategories-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    width: 100%;
+    max-height: none;
+    overflow: visible;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.subcategory-item {
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 0.8rem;
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.subcategory-link {
+    color: var(--secondary-color);
+    text-decoration: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    max-width: calc(100% - 30px); /* Account for count badge */
+}
+
+.subcategory-course-count {
+    background: var(--secondary-color);
+    color: white;
+    border-radius: 10px;
+    padding: 1px 6px;
+    font-size: 0.7rem;
+    min-width: 20px;
+    text-align: center;
+    margin-left: 4px;
+    flex-shrink: 0;
 }
 
 /* Category View Page */
@@ -99,38 +163,11 @@
     margin-bottom: 2rem;
 }
 
-.category-breadcrumb {
-    margin-bottom: 1rem;
-}
-
 .category-info {
     display: flex;
     gap: 2rem;
     align-items: flex-start;
     margin-bottom: 2rem;
-}
-
-.category-image {
-    flex: 0 0 300px;
-    border-radius: var(--border-radius);
-    overflow: hidden;
-    box-shadow: var(--box-shadow);
-}
-
-.category-image img {
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-}
-
-.category-text {
-    flex: 1;
-}
-
-.category-stats {
-    margin-top: 1rem;
-    display: flex;
-    gap: 0.5rem;
 }
 
 .section-title {
@@ -139,77 +176,6 @@
     color: var(--secondary-color);
     border-bottom: 2px solid var(--primary-color);
     padding-bottom: 0.5rem;
-}
-
-/* Subcategories Styles */
-.subcategories-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-}
-
-.subcategory-card {
-    background: white;
-    border-radius: var(--border-radius);
-    overflow: hidden;
-    box-shadow: var(--box-shadow);
-    transition: var(--transition);
-}
-
-.subcategory-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-}
-
-.subcategory-link {
-    display: block;
-    padding: 1.5rem;
-    text-decoration: none;
-    color: var(--text-dark);
-}
-
-.subcategories-container {
-    margin-top: 15px;
-    background: var(--subcategory-bg);
-    border-radius: calc(var(--border-radius) - 2px);
-    padding: 10px;
-}
-
-.subcategories-label {
-    font-size: 0.8rem;
-    font-weight: bold;
-    margin-bottom: 5px;
-    color: var(--secondary-color);
-}
-
-.subcategories-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-}
-
-.subcategory-item {
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 4px;
-    padding: 3px 8px;
-    font-size: 0.8rem;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.subcategory-course-count {
-    background: var(--secondary-color);
-    color: white;
-    border-radius: 10px;
-    padding: 0 5px;
-    font-size: 0.7rem;
-}
-
-.subcategory-meta {
-    font-size: 0.9rem;
-    color: var(--text-muted);
 }
 
 /* Course Card Styles */
@@ -309,23 +275,28 @@
 /* Responsive Styles */
 @media (max-width: 768px) {
     .block-card-courses-container,
-    .courses-grid,
-    .subcategories-grid {
+    .courses-grid {
         grid-template-columns: repeat(auto-fill, minmax(min(250px, 100%), 1fr));
     }
     
-    .category-content,
-    .course-content {
+    .category-content {
         padding: 15px;
     }
-    
-    .category-info {
-        flex-direction: column;
+    .subcategories-list {
+        gap: 4px;
     }
     
-    .category-image {
-        flex: 0 0 auto;
-        width: 100%;
+    .subcategory-item {
+        padding: 3px 6px;
+    }
+    
+    .subcategories-container {
+        padding: 10px;
+    }
+    
+    
+    .subcategory-link {
+        max-width: calc(100% - 26px);
     }
 }
 
@@ -334,4 +305,4 @@
     .course-card {
         break-inside: avoid;
     }
-}  
+}
