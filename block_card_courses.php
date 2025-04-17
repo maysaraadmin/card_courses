@@ -32,7 +32,7 @@ class block_card_courses extends block_base {
     }
 
     public function get_content() {
-        global $OUTPUT, $DB;
+        global $OUTPUT, $DB, $CFG;
 
         if ($this->content !== null) {
             return $this->content;
@@ -42,6 +42,11 @@ class block_card_courses extends block_base {
         $this->content->text = '';
         $this->content->footer = '';
 
+        $config = (object)[
+            'wwwroot' => $CFG->wwwroot,
+            'sesskey' => sesskey()
+        ];
+
         // Get configuration settings with defaults
         $rootcategory = isset($this->config->rootcategory) ? (int)$this->config->rootcategory : 0;
         $showcategories = isset($this->config->showcategories) ? (bool)$this->config->showcategories : true;
@@ -50,7 +55,10 @@ class block_card_courses extends block_base {
         $maxsubcategories = isset($this->config->maxsubcategories) ? (int)$this->config->maxsubcategories : 3;
 
         // Prepare data for template
-        $data = ['categories' => []];
+        $data = [
+            'categories' => [],
+            'config' => $config
+        ];
 
         if ($showcategories) {
             $categories = $DB->get_records('course_categories', 
@@ -73,7 +81,8 @@ class block_card_courses extends block_base {
                         'course_count' => $DB->count_records('course', ['category' => $category->id, 'visible' => 1]),
                         'image_url' => $this->get_category_image($category),
                         'has_subcategories' => false,
-                        'subcategories' => []
+                        'subcategories' => [],
+                        'subcategories_count' => 0
                     ];
 
                     // Get subcategories if enabled
@@ -85,6 +94,8 @@ class block_card_courses extends block_base {
                             0,
                             $maxsubcategories
                         );
+
+                        $categorydata['subcategories_count'] = $DB->count_records('course_categories', ['parent' => $category->id, 'visible' => 1]);
 
                         if (!empty($subcategories)) {
                             $categorydata['has_subcategories'] = true;
