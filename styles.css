@@ -9,179 +9,157 @@
     --border-radius: 8px;
     --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     --transition: all 0.3s ease;
-    --subcategory-bg: rgba(255, 255, 255, 0.2);
-}
-
-/* Accessibility Focus Styles */
-.category-link:focus,
-.course-link:focus,
-.subcategory-link:focus {
-    outline: 2px solid var(--primary-color);
-    outline-offset: 2px;
 }
 
 /* Main Container */
 .block-card-courses-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
-    gap: 20px;
-    padding: 10px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-/* Category Card Styles */
-.category-card {
-    border-radius: var(--border-radius);
-    overflow: hidden;
-    box-shadow: var(--box-shadow);
-    transition: var(--transition);
-    background: var(--primary-color);
-    color: var(--text-dark);
-    height: 100%;
+/* Combined Category Container */
+.combined-category-card {
     display: flex;
     flex-direction: column;
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    overflow: hidden;
+    transition: var(--transition);
+    height: 100%;
+}
+.combined-category-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
 }
 
-.category-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+/* Main Category Card */
+.main-category-card {
+    padding: 25px;
+    background: var(--primary-color);
+    color: var(--text-dark);
+    flex: 1;
+}
+
+
+.main-category-section {
+    padding: 25px;
+    background: var(--primary-color);
+    color: var(--text-dark);
 }
 
 .category-link {
     text-decoration: none;
     color: inherit;
-    display: flex;
-    flex-direction: column;
+    display: block;
     height: 100%;
 }
 
 .category-content {
-    padding: 20px;
     display: flex;
     flex-direction: column;
+    gap: 15px;
     height: 100%;
-    gap: 12px;
 }
 
 .category-title {
     margin: 0;
-    font-size: 1.2rem;
-    font-weight: bold;
+    font-size: 1.4rem;
+    font-weight: 700;
     color: var(--secondary-color);
     line-height: 1.3;
 }
 
 .category-description {
-    color: rgba(60, 60, 64, 0.8);
-    font-size: 0.9rem;
+    color: rgba(60, 60, 64, 0.9);
+    font-size: 1rem;
     margin: 0;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    line-height: 1.4;
+    line-height: 1.5;
 }
 
 .category-meta {
     display: flex;
+    align-items: center;
     gap: 10px;
     color: var(--secondary-color);
-    font-size: 0.8rem;
-    font-weight: bold;
-    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-top: 10px;
+}
+.course-count {
+    display: inline-flex;
+    align-items: center;
 }
 
-/* Subcategories in Category Card */
-.subcategories-container {
-    margin-top: auto;
-    background: var(--subcategory-bg);
-    border-radius: calc(var(--border-radius) - 2px);
-    padding: 12px;
-    width: 100%;
+/* Subcategories Card */
+
+.subcategories-section {
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
 
-.subcategories-label {
-    font-size: 0.8rem;
-    font-weight: bold;
-    margin-bottom: 8px;
+.subcategories-card {
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.subcategories-header {
+    margin-bottom: 15px;
+}
+
+.subcategories-title {
+    margin: 0 0 10px 0;
+    font-size: 1.1rem;
+    font-weight: 600;
     color: var(--secondary-color);
 }
 
 .subcategories-list {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
-    width: 100%;
-    max-height: none;
-    overflow: visible;
-    margin: 0;
-    padding: 0;
+    gap: 10px;
 }
 .subcategory-item {
-    background: rgba(255, 255, 255, 0.7);
-    border-radius: 4px;
-    padding: 5px 10px;
-    font-size: 0.8rem;
+    background: rgba(252, 196, 52, 0.15);
+    border-radius: var(--border-radius);
+    padding: 8px 12px;
+    font-size: 0.9rem;
     display: inline-flex;
     align-items: center;
-    white-space: nowrap;
-    max-width: 100%;
-    box-sizing: border-box;
+    transition: var(--transition);
+}
+
+.subcategory-item:hover {
+    background: rgba(252, 196, 52, 0.25);
 }
 .subcategory-link {
     color: var(--secondary-color);
     text-decoration: none;
+    font-weight: 500;
+    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    max-width: 160px;
     display: inline-block;
-    max-width: 120px;
-    vertical-align: middle;
 }
 
 .subcategory-course-count {
     background: var(--secondary-color);
     color: white;
     border-radius: 10px;
-    padding: 2px 6px;
-    font-size: 0.7rem;
-    min-width: 20px;
-    text-align: center;
-    margin-left: 5px;
-    flex-shrink: 0;
+    padding: 2px 8px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin-left: 6px;
 }
 
-/* Category View Page */
-.category-view {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem 1rem;
-}
-
-.category-header {
-    margin-bottom: 2rem;
-}
-
-.category-info {
-    display: flex;
-    gap: 2rem;
-    align-items: flex-start;
-    margin-bottom: 2rem;
-}
-
-.section-title {
-    font-size: 1.5rem;
-    margin: 2rem 0 1rem;
-    color: var(--secondary-color);
-    border-bottom: 2px solid var(--primary-color);
-    padding-bottom: 0.5rem;
-}
-
-/* Course Card Styles */
-.courses-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
-    gap: 20px;
-}
-
+/* Course Card */
 .course-card {
     border-radius: var(--border-radius);
     overflow: hidden;
@@ -189,19 +167,6 @@
     transition: var(--transition);
     background: var(--primary-color);
     color: var(--text-dark);
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
-.course-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-.course-link {
-    text-decoration: none;
-    color: inherit;
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -222,14 +187,6 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: var(--transition);
-}
-
-.course-image[src*='defaultcourse'] {
-    object-fit: contain;
-    padding: 20px;
-    width: 80%;
-    height: 80%;
 }
 
 .course-content {
@@ -246,60 +203,50 @@
     color: var(--secondary-color);
 }
 
-.course-description {
-    color: rgba(60, 60, 64, 0.8);
-    font-size: 0.9rem;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    flex-grow: 1;
+/* Accessibility */
+a:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 3px;
 }
 
-/* Utility Classes */
-.paging-bar {
-    margin-top: 30px;
-}
-
-.alert.alert-info {
-    background: #d9edf7;
-    color: #31708f;
-    padding: 15px;
-    border-radius: var(--border-radius);
-    text-align: center;
-}
-
-/* Responsive Styles */
+/* Responsive */
 @media (max-width: 768px) {
-    .block-card-courses-container,
-    .courses-grid {
-        grid-template-columns: repeat(auto-fill, minmax(min(250px, 100%), 1fr));
+    .block-card-courses-container {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+        padding: 15px;
+    }
+        
+    .main-category-section {
+        padding: 20px;
     }
     
-    .subcategories-container {
-        padding: 10px;
-    }
-    
-    .category-content {
+    .subcategories-section {
         padding: 15px;
     }
 
-    .subcategories-list {
-        gap: 6px;
+    .category-title {
+        font-size: 1.3rem;
     }
-    
-     .subcategory-item {
-        padding: 4px 8px;
-    }
-    
-    .subcategory-link {
-        max-width: 100px;
-    }
+
 }
 
-@media print {
-    .category-card,
-    .course-card {
-        break-inside: avoid;
+@media (max-width: 480px) {
+
+    .block-card-courses-container {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .category-title {
+        font-size: 1.2rem;
+    }
+    
+    .subcategories-title {
+        font-size: 1rem;
+    }
+
+    .subcategory-link {
+        max-width: 120px;
     }
 }

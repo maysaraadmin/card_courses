@@ -1,25 +1,31 @@
-<div class="category-card">
-    <a href="{{url}}" class="category-link" aria-label="{{#str}}viewcategory, block_card_courses, {{name}}{{/str}}">
-        <div class="category-content">
-            <h4 class="category-title">{{name}}</h4>
-            <div class="category-description">{{{description}}}</div>
-            <div class="category-meta">
-                <span class="course-count">{{course_count}} {{#str}}courses, block_card_courses{{/str}}</span>
-            </div>
-            
-            {{#has_subcategories}}
-            <div class="subcategories-container">
-                <div class="subcategories-label">{{#str}}subcategories, block_card_courses{{/str}}</div>
-                <div class="subcategories-list">
-                    {{#subcategories}}
-                    <div class="subcategory-item">
-                        <a href="{{url}}" class="subcategory-link">{{name}}</a>
-                        <span class="subcategory-course-count">{{course_count}}</span>
-                    </div>
-                    {{/subcategories}}
+<div class="combined-category-card">
+    <!-- Main Category Card -->
+    <div class="main-category-card">
+        <a href="{{url}}" class="category-link" aria-label="{{#str}}viewcategory, block_card_courses, {{name}}{{/str}}">
+            <div class="category-content">
+                <h3 class="category-title">{{name}}</h3>
+                <div class="category-description">{{{description}}}</div>
+                <div class="category-meta">
+                    <span class="course-count">{{course_count}} {{#str}}courses, block_card_courses{{/str}}</span>
                 </div>
             </div>
-            {{/has_subcategories}}
+        </a>
+    </div>
+
+    <!-- Subcategories Card -->
+    {{#has_subcategories}}
+    <div class="subcategories-card">
+        <div class="subcategories-header">
+            <h4 class="subcategories-title">{{#str}}subcategories, block_card_courses{{/str}}</h4>
         </div>
-    </a>
+        <div class="subcategories-list">
+            {{#subcategories}}
+            <div class="subcategory-item">
+                <a href="{{url}}" class="subcategory-link">{{name}}</a>
+                <span class="subcategory-course-count">{{course_count}}</span>
+            </div>
+            {{/subcategories}}
+        </div>
+    </div>
+    {{/has_subcategories}}
 </div>
