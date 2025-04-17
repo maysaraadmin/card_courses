@@ -6,6 +6,20 @@
             <div class="category-meta">
                 <span class="course-count">{{course_count}} {{#str}}courses, block_card_courses{{/str}}</span>
             </div>
+            
+            {{#has_subcategories}}
+            <div class="subcategories-container">
+                <div class="subcategories-label">{{#str}}subcategories, block_card_courses{{/str}}</div>
+                <div class="subcategories-list">
+                    {{#subcategories}}
+                    <div class="subcategory-item">
+                        <a href="{{url}}" class="subcategory-link">{{name}}</a>
+                        <span class="subcategory-course-count">{{course_count}}</span>
+                    </div>
+                    {{/subcategories}}
+                </div>
+            </div>
+            {{/has_subcategories}}
         </div>
     </a>
 </div>

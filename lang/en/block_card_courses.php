@@ -78,3 +78,4 @@ $string['viewcategory'] = 'View category {$a}';
 $string['nocontent'] = 'No categories available to display.';
 $string['block_card_courses:addinstance'] = 'Add a new Card Courses block';
 $string['block_card_courses:myaddinstance'] = 'Add a new Card Courses block to Dashboard';
+$string['subcategories'] = 'Subcategories';

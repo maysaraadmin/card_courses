@@ -4,6 +4,7 @@
     --text-light: #ffffff;
     --text-dark: #333333;
     --border-radius: 8px;
+    --subcategory-bg: rgba(255, 255, 255, 0.2);
 }
 
 .category-link:focus,
@@ -89,6 +90,48 @@
 
 .category-header h1 {
     margin-top: 0;
+}
+
+.subcategories-container {
+    margin-top: 15px;
+    background: var(--subcategory-bg);
+    border-radius: calc(var(--border-radius) - 2px);
+    padding: 10px;
+}
+.subcategories-label {
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: var(--secondary-color);
+}
+.subcategories-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+.subcategory-item {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    padding: 3px 8px;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.subcategory-link {
+    color: var(--secondary-color);
+    text-decoration: none;
+}
+
+.subcategory-link:hover {
+    text-decoration: underline;
+}
+.subcategory-course-count {
+    background: var(--secondary-color);
+    color: white;
+    border-radius: 10px;
+    padding: 0 5px;
+    font-size: 0.7rem;
 }
 
 .courses-grid {

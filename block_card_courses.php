@@ -45,7 +45,9 @@ class block_card_courses extends block_base {
         // Get configuration settings with defaults
         $rootcategory = isset($this->config->rootcategory) ? (int)$this->config->rootcategory : 0;
         $showcategories = isset($this->config->showcategories) ? (bool)$this->config->showcategories : true;
+        $showsubcategories = isset($this->config->showsubcategories) ? (bool)$this->config->showsubcategories : true;
         $maxcategories = isset($this->config->maxcategories) ? (int)$this->config->maxcategories : 6;
+        $maxsubcategories = isset($this->config->maxsubcategories) ? (int)$this->config->maxsubcategories : 3;
 
         // Prepare data for template
         $data = ['categories' => []];
@@ -63,14 +65,49 @@ class block_card_courses extends block_base {
                 try {
                     $categorycontext = context_coursecat::instance($category->id);
                     
-                    $data['categories'][] = [
+                    $categorydata = [
                         'id' => $category->id,
                         'name' => format_string($category->name, true, ['context' => $categorycontext]),
                         'description' => format_text($category->description, $category->descriptionformat, ['context' => $categorycontext]),
                         'url' => new moodle_url('/blocks/card_courses/category.php', ['id' => $category->id]),
                         'course_count' => $DB->count_records('course', ['category' => $category->id, 'visible' => 1]),
-                        'image_url' => $this->get_category_image($category)
+                        'image_url' => $this->get_category_image($category),
+                        'has_subcategories' => false,
+                        'subcategories' => []
                     ];
+
+                    // Get subcategories if enabled
+                    if ($showsubcategories) {
+                        $subcategories = $DB->get_records('course_categories', 
+                            ['parent' => $category->id, 'visible' => 1],
+                            'sortorder ASC',
+                            '*',
+                            0,
+                            $maxsubcategories
+                        );
+
+                        if (!empty($subcategories)) {
+                            $categorydata['has_subcategories'] = true;
+                            
+                            foreach ($subcategories as $subcategory) {
+                                try {
+                                    $subcategorycontext = context_coursecat::instance($subcategory->id);
+                                    
+                                    $categorydata['subcategories'][] = [
+                                        'id' => $subcategory->id,
+                                        'name' => format_string($subcategory->name, true, ['context' => $subcategorycontext]),
+                                        'url' => new moodle_url('/blocks/card_courses/category.php', ['id' => $subcategory->id]),
+                                        'course_count' => $DB->count_records('course', ['category' => $subcategory->id, 'visible' => 1])
+                                    ];
+                                } catch (Exception $e) {
+                                    debugging('Error loading subcategory '.$subcategory->id.': '.$e->getMessage(), DEBUG_NORMAL);
+                                    continue;
+                                }
+                            }
+                        }
+                    }
+
+                    $data['categories'][] = $categorydata;
                 } catch (Exception $e) {
                     debugging('Error loading category '.$category->id.': '.$e->getMessage(), DEBUG_NORMAL);
                     continue;
