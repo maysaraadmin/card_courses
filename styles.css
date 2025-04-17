@@ -45,7 +45,6 @@
     flex: 1;
 }
 
-
 .main-category-section {
     padding: 25px;
     background: var(--primary-color);
@@ -108,7 +107,6 @@
     background: rgba(255, 255, 255, 0.95);
     border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
-
 .subcategories-header {
     margin-bottom: 15px;
 }
