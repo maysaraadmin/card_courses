@@ -14,11 +14,12 @@
 /* Main Container */
 .block-card-courses-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 25px;
-    padding: 20px;
-    max-width: 1200px;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    padding: 15px;
     margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 /* Combined Category Container */
@@ -31,7 +32,10 @@
     overflow: hidden;
     transition: var(--transition);
     height: 100%;
+    width: 100%;
+    box-sizing: border-box;
 }
+
 .combined-category-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
@@ -310,6 +314,45 @@
     font-size: 1.1rem;
     font-weight: bold;
     color: var(--text-dark);
+}
+
+/* Drawer Content Adjustments */
+.drawercontent .block-card-courses-container {
+    padding: 10px;
+    gap: 15px;
+}
+
+.drawercontent .combined-category-card {
+    margin-bottom: 10px;
+}
+
+.drawercontent .main-category-card {
+    padding: 15px;
+}
+
+.drawercontent .category-title {
+    font-size: 1.2rem;
+}
+
+.drawercontent .category-description {
+    font-size: 0.9rem;
+}
+
+.drawercontent .subcategories-card {
+    padding: 15px;
+}
+
+.drawercontent .subcategories-list {
+    gap: 8px;
+}
+
+.drawercontent .subcategory-item {
+    padding: 6px 10px;
+}
+
+.drawercontent .subcategory-link {
+    max-width: 140px;
+    font-size: 0.85rem;
 }
 
 /* Accessibility */
