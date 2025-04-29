@@ -42,13 +42,13 @@ echo $OUTPUT->header();
 
 // Get courses with pagination - returns core_course_list_element objects
 $courses = $category->get_courses([
-    'recursive' => false,
+    'recursive' => true,
     'offset' => $page * $perpage,
     'limit' => $perpage,
     'sort' => ['sortorder' => 'ASC']
 ]);
 
-$totalcourses = $category->get_courses_count(['recursive' => false]);
+$totalcourses = $category->get_courses_count(['recursive' => true]);
 
 $data = [
     'category' => [

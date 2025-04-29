@@ -78,7 +78,14 @@ class block_card_courses extends block_base {
                         'name' => format_string($category->name, true, ['context' => $categorycontext]),
                         'description' => format_text($category->description, $category->descriptionformat, ['context' => $categorycontext]),
                         'url' => new moodle_url('/blocks/card_courses/category.php', ['id' => $category->id]),
-                        'course_count' => $DB->count_records('course', ['category' => $category->id, 'visible' => 1]),
+                        'course_count' => $DB->count_records_sql(
+                            "SELECT COUNT(DISTINCT c.id)
+                             FROM {course} c
+                             JOIN {course_categories} cc ON c.category = cc.id
+                             WHERE (c.category = :catid OR (cc.path LIKE :pathpattern AND c.visible = 1))
+                             AND c.visible = 1",
+                            ['catid' => $category->id, 'pathpattern' => '%/' . $category->id . '/%']
+                        ),
                         'image_url' => $this->get_category_image($category),
                         'has_subcategories' => false,
                         'subcategories' => [],
