@@ -218,6 +218,12 @@
     margin: 0;
 }
 
+@media (max-width: 768px) {
+    .courses-grid.grid-view {
+        grid-template-columns: 1fr;
+    }
+}
+
 .course-image {
     width: 100%;
     height: 100%;

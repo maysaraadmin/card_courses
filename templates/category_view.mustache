@@ -27,11 +27,11 @@
     
     <section class="category-courses" aria-labelledby="courses-heading">
         <h2 id="courses-heading" class="section-title">{{#str}}courses, block_card_courses{{/str}}</h2>
-        {{#courses}}
         <div class="courses-grid grid-view">
-            {{> block_card_courses/course_card}}
+            {{#courses}}
+                {{> block_card_courses/course_card}}
+            {{/courses}}
         </div>
-        {{/courses}}
         {{^courses}}
         <div class="alert alert-info">
             {{#str}}nocourses, block_card_courses{{/str}}
