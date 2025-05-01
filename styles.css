@@ -204,6 +204,20 @@
     background: var(--secondary-light);
 }
 
+/* Grid View Styles */
+.courses-grid.grid-view {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.courses-grid.grid-view .course-card {
+    width: 100%;
+    margin: 0;
+}
+
 .course-image {
     width: 100%;
     height: 100%;
